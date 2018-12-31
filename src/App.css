@@ -1,0 +1,107 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+button, input[type=text], input:not([type]) {
+  height: 10vw;
+  min-width: 20vw;
+  padding: 1vw;
+  margin: 1vw;
+  border-size: 1px; /* solid grey;*/
+
+  -moz-box-sizing: content-box; /* or `border-box` */
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+
+  font-size: 100%;
+  font-weight: 100;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+  text-align: left;
+  font-size: calc(20px + 2vmin);
+  font-weight: 100;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* .App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+} */
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 150%;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* @keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
+.Row {
+  width: 100vw;
+  overflow-x: scroll;
+}
+.Row-contents {
+  width: 99999px;
+  display: flex;
+  flex-direction: row;
+  flex: 100vw 0 0;
+}
+
+.TaskList {
+  /* margin: 0 10px; */
+  width: 100vw;
+}
+.TaskList-name:not(:focus) {
+  border-color: rgba(0, 0, 0, 0);
+}
+.TaskList ul {
+  padding-left: 1vw;
+  list-style-type: none;
+}
+.TaskList li {
+  height: 14vw;
+  position: relative;
+}
+.TaskList input[type=checkbox] {
+  width: 14vw;
+  height: 14vw;
+}
+.TaskList input[type=checkbox] + label {
+  width: 12vw;
+  height: 12vw;
+  display: block;
+  position: absolute;
+  background: lightgrey;
+  top: 4vw;
+  left: 1vw;
+}
+.TaskList input[type=checkbox]:checked + label {
+  background: #666666;
+}
