@@ -22,8 +22,10 @@ class TaskList extends Component {
     }
   }
   addTask() {
-    this.props.onAddTask(this.props.i, this.state.newTaskName)
-    this.setState({newTaskName: ""})
+    if (!!this.state.newTaskName && this.state.newTaskName.trim().length > 0) {
+      this.props.onAddTask(this.props.i, this.state.newTaskName)
+      this.setState({newTaskName: ""})
+    }
   }
   render(props) {
     let i = this.props.i
@@ -160,7 +162,7 @@ class App extends Component {
   }
   maybeRemoveTask(i, j) {
     let task = this.state.taskLists[i].tasks[j]
-    if (task.name.trim() === "") {
+    if (!task.name || task.name.trim() === "") {
       let state = update(this.state, {
         taskLists: {
           [i]: {tasks: {$unset: [j]}},
@@ -180,12 +182,15 @@ class App extends Component {
   clearTasks(i) {
     let state = update(this.state, {})
     for (let j=0; j<this.state.taskLists[i].tasks.length; j++) {
-      let task = {...this.state.taskLists[i].tasks[j], done: false}
-      state = update(state, {
-        taskLists: {
-          [i]: {tasks: {[j]: {$set: task}}},
-        }
-      })
+      let task = this.state.taskLists[i].tasks[j]
+      if (!!task && !!task.name) {
+        task = {...task, done: false}
+        state = update(state, {
+          taskLists: {
+            [i]: {tasks: {[j]: {$set: task}}},
+          }
+        })
+      }
     }
     this.setState(state)
   }
