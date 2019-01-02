@@ -65,7 +65,7 @@ button, input[type=text], input:not([type]) {
 
 .Row {
   width: 100vw;
-  overflow-x: scroll;
+  overflow-x: hidden;
 }
 .Row-contents {
   width: 99999px;
@@ -88,6 +88,11 @@ button, input[type=text], input:not([type]) {
 .TaskList li {
   height: 14vw;
   position: relative;
+  display: flex;
+  flex-direction: row;
+}
+.TaskList li input {
+  margin-top: 2.5vw;
 }
 .TaskList input[type=checkbox] {
   width: 14vw;

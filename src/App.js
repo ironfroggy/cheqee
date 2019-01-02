@@ -35,16 +35,23 @@ class TaskList extends Component {
           value={this.props.name}
         ></input>
         <ul>{this.props.tasks.map((t, j) =>
-          <li>
-            <input
-              id={`cb-task-${i}-${j}`}
-              type="checkbox"
-              checked={t.done}
-              onChange={(ev) => this.props.onSetTask(i, j, ev.target.checked)}
-            ></input>
-            <label for={`cb-task-${i}-${j}`}></label>
-            {t.name}
-          </li>
+          (t===null?null:
+            <li>
+              <input
+                id={`cb-task-${i}-${j}`}
+                type="checkbox"
+                checked={t.done}
+                onChange={(ev) => this.props.onSetTask(i, j, ev.target.checked)}
+              ></input>
+              <label for={`cb-task-${i}-${j}`}></label>
+              <input
+                className='TaskList-name'
+                onChange={(ev) => this.props.onSetTaskName(i, j, ev.target.value)}
+                onBlur={(ev) => this.props.onMaybeRemoveTask(i, j)}
+                value={t.name}
+              ></input>
+            </li>
+          )
         )}</ul>
         {Input(this, 'newTaskName')}
         <button onClick={() => this.addTask()}>add</button>
@@ -77,7 +84,9 @@ class Carousel extends Component {
           onAddTask={this.props.onAddTask}
           onSetTask={this.props.onSetTask}
           onSetTaskListName={this.props.onSetTaskListName}
+          onSetTaskName={this.props.onSetTaskName}
           onClearTasks={this.props.onClearTasks}
+          onMaybeRemoveTask={this.props.onMaybeRemoveTask}
           registerScrollElement={(el) => this.elements[i] = el}
           onScrollTo={(j) => {
             if (!!this.elements[j]) {
@@ -118,7 +127,7 @@ class App extends Component {
     let newList = {
       name: `New List ${this.state.taskLists.length + 1}`,
       tasks: [
-        {name: 'task', done: false},
+        // {name: 'task', done: false},
       ],
     }
     this.setState({taskLists: [...this.state.taskLists, newList]})
@@ -139,6 +148,26 @@ class App extends Component {
       }
     })
     this.setState(state)
+  }
+  setTaskName(i, j, name) {
+    let task = {...this.state.taskLists[i].tasks[j], name}
+    let state = update(this.state, {
+      taskLists: {
+        [i]: {tasks: {[j]: {$set: task}}},
+      }
+    })
+    this.setState(state)
+  }
+  maybeRemoveTask(i, j) {
+    let task = this.state.taskLists[i].tasks[j]
+    if (task.name.trim() === "") {
+      let state = update(this.state, {
+        taskLists: {
+          [i]: {tasks: {$unset: [j]}},
+        }
+      })
+      this.setState(state)
+    }
   }
   setTaskListName(i, name) {
     let state = update(this.state, {
@@ -170,6 +199,8 @@ class App extends Component {
           onAddTask={this.addTask.bind(this)}
           onSetTask={this.setTask.bind(this)}
           onSetTaskListName={this.setTaskListName.bind(this)}
+          onSetTaskName={this.setTaskName.bind(this)}
+          onMaybeRemoveTask={this.maybeRemoveTask.bind(this)}
           onClearTasks={this.clearTasks.bind(this)}
           taskLists={this.state.taskLists}
         ></Carousel>
